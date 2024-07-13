@@ -1,0 +1,19 @@
+.button{
+    margin-top: 15px;
+}
+.containerNav{
+display: flex;
+gap:10px;
+font-size: 24px;
+}
+.container{
+    display: flex;
+
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.listWrap{
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}

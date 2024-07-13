@@ -1,0 +1,15 @@
+.container{
+border-bottom: 1px solid;
+}
+.navigationWrap{
+    display: flex;
+    gap: 20px;
+}
+.link {
+    text-decoration: none;
+    color: black;
+}
+
+.active {
+    color: brown;
+}
