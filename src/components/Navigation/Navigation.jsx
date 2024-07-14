@@ -12,7 +12,7 @@ export default function Navigation() {
         <header className={css.container}>
             <nav className={css.navigationWrap}>
                 <NavLink to="/" className={makeNavLinkClass}>HOME</NavLink>
-                <NavLink to="/movie" className={makeNavLinkClass}>MOVIES</NavLink>
+                <NavLink to="/movies" className={makeNavLinkClass}>MOVIES</NavLink>
             </nav>
         </header>
     )
