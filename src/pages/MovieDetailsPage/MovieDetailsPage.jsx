@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { NavLink, Outlet, useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { useParams, NavLink, Route, Routes, useNavigate, useLocation } from 'react-router-dom';
-import MovieCast from '../../components/MovieCast/MovieCast';
-import MovieReviews from '../../components/MovieReviews/MovieReviews';
 import css from "./MovieDetailsPage.module.css";
 
 const API_TOKEN = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkZGMyNmNhYTRkNzBjZWIzMjAyODhmYjFkNTQ2NTdiYiIsIm5iZiI6MTcyMDcxNTgwNi4zNzUxODMsInN1YiI6IjY2OGZmMWY0YWI5ZjZhYWY5YjkxM2IzYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KIhzSwEv9c2gz8AxBsUy5VLCwN5ztKLWBSp4FGZ84oI';
@@ -13,20 +11,24 @@ export default function MovieDetailsPage() {
   const [movie, setMovie] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const [previousPage, setPreviousPage] = useState('/movies');
+  const previousPageRef = useRef('/movies');
 
   useEffect(() => {
     if (location.state?.from) {
-      setPreviousPage(location.state.from);
+      previousPageRef.current = location.state.from;
     }
 
     const fetchMovieDetails = async () => {
-      const response = await axios.get(`https://api.themoviedb.org/3/movie/${movieId}`, {
-        headers: {
-          Authorization: API_TOKEN,
-        },
-      });
-      setMovie(response.data);
+      try {
+        const response = await axios.get(`https://api.themoviedb.org/3/movie/${movieId}`, {
+          headers: {
+            Authorization: API_TOKEN,
+          },
+        });
+        setMovie(response.data);
+      } catch (error) {
+        console.error('Failed to fetch movie details:', error);
+      }
     };
 
     fetchMovieDetails();
@@ -38,7 +40,7 @@ export default function MovieDetailsPage() {
 
   return (
     <div>
-      <button onClick={() => navigate(previousPage)} className={css.button}>Go back</button>
+      <button onClick={() => navigate(previousPageRef.current)} className={css.button}>Go back</button>
       <div className={css.container}>
         <img src={`${IMAGE_BASE_URL}${movie.poster_path}`} alt={movie.title} height={500} />
         <ul className={css.listWrap}>
@@ -53,10 +55,7 @@ export default function MovieDetailsPage() {
         <NavLink to="cast">Cast</NavLink>
         <NavLink to="reviews">Reviews</NavLink>
       </nav>
-      <Routes>
-        <Route path="cast" element={<MovieCast />} />
-        <Route path="reviews" element={<MovieReviews />} />
-      </Routes>
+      <Outlet />
     </div>
   );
 }
